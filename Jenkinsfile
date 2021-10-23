@@ -4,21 +4,22 @@ pipeline {
     }
 
 	stages {
+
 		stage('Prerequisites') {
 			steps {
-				sh """
-					yum update -y
-					yum install -y g++
-				"""
+					sh """
+						sudo yum -y update
+						sudo yum -y install g++						
+					"""
 			}
 		}
 
 		stage('Compile') {
 			steps {
-				ssh """
-					g++ --version
-					g++ chatclient.cpp -lpthread -o ../chatclient						
-				"""
+					ssh """
+						g++ --version
+						g++ chatclient.cpp -lpthread -o ../chatclient						
+					"""
 			}
 		}		
 	}
