@@ -7,8 +7,8 @@ pipeline {
 		stage('Prerequisites') {
 			steps {
 				sh """
-					apt update -y
-					apt install -y g++
+					yum update -y
+					yum install -y g++
 				"""
 			}
 		}
