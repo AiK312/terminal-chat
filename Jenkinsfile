@@ -16,7 +16,7 @@ pipeline {
 
 		stage('Compile') {
 			steps {
-					ssh """
+					sh """
 						g++ --version
 						g++ chatclient.cpp -lpthread -o ../chatclient						
 					"""
