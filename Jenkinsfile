@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'JenkinsSlaveAWS'
+        label 'aws'
     }
 
 	stages {
@@ -9,7 +9,16 @@ pipeline {
 					sh """
                         apt update -y
                         apt install -y g++
-						"""
+					"""
+			}
+		}
+
+		stage('Compile') {
+			steps {
+					ssh """
+						g++ --version
+						g++ chatclient.cpp -lpthread -o ../chatclient						
+					"""
 			}
 		}		
 	}
