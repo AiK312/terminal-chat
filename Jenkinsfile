@@ -32,6 +32,15 @@ pipeline {
 						g++ chatserver.cpp -lpthread -o ../Chat-Terminal/Server/chatserver						
 					"""
 			}
+		}
+
+		stage('Test stage') {
+			steps {
+					sh """
+						pwd
+						uptime
+					"""
+			}
 		}		
 	}
 }
