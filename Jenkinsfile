@@ -7,6 +7,8 @@ pipeline {
         SLACK_CHANNEL = 'aik-messages'
         IP_ADDRESS = 'undefined'
         PORT = '31279'
+        IMAGE_NAME_SERVER = 'chatServer'
+        IMAGE_NAME_CLIENT = 'chatClient'
     }
 
     stages {
@@ -25,21 +27,40 @@ pipeline {
 
         stage('Compile') {
             steps {
-                    sh '''
+                    sh """
                         g++ --version
                         g++ chatclient.cpp -lpthread -o ../Chat-Terminal/Client/chatclient
                         g++ chatserver.cpp -lpthread -o ../Chat-Terminal/Server/chatserver
-                    '''
+                    """
             }
         }
 
         stage('Test stage') {
             steps {
-                    sh '''
+                    sh """
                         pwd
                         uptime
-                    '''
+                    """
             }
+        }
+
+        stage("Build docker image") {
+            when {
+                branch 'master'
+            }
+
+            steps {
+                echo "Build server and client docker images"
+                sh """
+                    pwd
+                    echo "Building image: ${IMAGE_NAME_SERVER}"
+                    docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:latest . 
+                    echo "Building image: ${IMAGE_NAME_CLIENT}"
+                    docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
+                    ls -la
+                """
+            }
+
         }
     }
 
