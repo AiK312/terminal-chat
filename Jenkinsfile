@@ -4,7 +4,7 @@ pipeline {
     }
 
 	environment {		
-		//SLACK_CHANNEL = ''		
+		SLACK_CHANNEL = 'aik-messages'		
 		IP_ADDRESS = "undefined"
 		PORT = "31279"
 	}
@@ -42,5 +42,16 @@ pipeline {
 					"""
 			}
 		}		
+	}
+
+	post {
+	failure {
+		slackSend channel: "${ SLACK_CHANNEL }", color: 'danger', message: "${ env.JOB_NAME } ${ env.BUILD_NUMBER } failed (<${ env.BUILD_URL }|Open>)"
+	}
+
+	post {
+		success {
+			slackSend channel: "${ SLACK_CHANNEL }", color: 'good', message: "${ env.JOB_NAME} ${ env.BUILD_NUMBER } complete (<${ env.BUILD_URL }|Open>)"
+		}
 	}
 }
