@@ -45,13 +45,14 @@ pipeline {
 	}
 
 	post {
-	failure {
-		slackSend channel: "${ SLACK_CHANNEL }", color: 'danger', message: "${ env.JOB_NAME } ${ env.BUILD_NUMBER } failed (<${ env.BUILD_URL }|Open>)"
-	}
+		failure {
+			slackSend channel: "${ SLACK_CHANNEL }", color: 'danger', message: "${ env.JOB_NAME } ${ env.BUILD_NUMBER } failed (<${ env.BUILD_URL }|Open>)"
+		}
 
-	post {
-		success {
-			slackSend channel: "${ SLACK_CHANNEL }", color: 'good', message: "${ env.JOB_NAME} ${ env.BUILD_NUMBER } complete (<${ env.BUILD_URL }|Open>)"
+		post {
+			success {
+				slackSend channel: "${ SLACK_CHANNEL }", color: 'good', message: "${ env.JOB_NAME} ${ env.BUILD_NUMBER } complete (<${ env.BUILD_URL }|Open>)"
+			}
 		}
 	}
 }
