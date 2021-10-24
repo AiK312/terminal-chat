@@ -45,10 +45,6 @@ pipeline {
         }
 
         stage("Build docker image") {
-            when {
-                branch 'master'
-            }
-
             steps {
                 echo "Build server and client docker images"
                 sh """
