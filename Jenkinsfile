@@ -29,8 +29,8 @@ pipeline {
             steps {
                 sh """
                     g++ --version
-                    g++ chatclient.cpp -lpthread -o ../Chat-Terminal/Client/chatclient
-                    g++ chatserver.cpp -lpthread -o ../Chat-Terminal/Server/chatserver
+                    g++ chatclient.cpp -lpthread -o chatclient
+                    g++ chatserver.cpp -lpthread -o chatserver
                 """
             }
         }
