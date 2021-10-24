@@ -14,33 +14,33 @@ pipeline {
     stages {
         stage('Prerequisites') {
             steps {
-                    sh """
-                        sudo yum -y update
-                        sudo yum -y install gcc-c++    curl
-                        IP_ADDRESS=\$(curl eth0.me)
-                        mkdir -p ../Chat-Terminal/Client
-                        mkdir -p ../Chat-Terminal/Server
-                        printenv
-                    """
+                sh """
+                    sudo yum -y update
+                    sudo yum -y install gcc-c++ curl
+                    IP_ADDRESS=\$(curl eth0.me)
+                    mkdir -p ../Chat-Terminal/Client
+                    mkdir -p ../Chat-Terminal/Server
+                    printenv
+                """
             }
         }
 
         stage('Compile') {
             steps {
-                    sh """
-                        g++ --version
-                        g++ chatclient.cpp -lpthread -o ../Chat-Terminal/Client/chatclient
-                        g++ chatserver.cpp -lpthread -o ../Chat-Terminal/Server/chatserver
-                    """
+                sh """
+                    g++ --version
+                    g++ chatclient.cpp -lpthread -o ../Chat-Terminal/Client/chatclient
+                    g++ chatserver.cpp -lpthread -o ../Chat-Terminal/Server/chatserver
+                """
             }
         }
 
-        stage('Test stage') {
+        stage('Check Version') {
             steps {
-                    sh """
-                        pwd
-                        uptime
-                    """
+                sh """
+                    docker --version
+                    git --version
+                """
             }
         }
 
@@ -49,10 +49,11 @@ pipeline {
                 echo "Build server and client docker images"
                 sh """
                     pwd
+                    ls -la
                     echo "Building image: ${IMAGE_NAME_SERVER}"
-                    docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:latest . 
+                    sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:latest . 
                     echo "Building image: ${IMAGE_NAME_CLIENT}"
-                    docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
+                    sudo docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
                     ls -la
                 """
             }
