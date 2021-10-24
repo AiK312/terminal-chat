@@ -7,8 +7,8 @@ pipeline {
         SLACK_CHANNEL = 'aik-messages'
         IP_ADDRESS = 'undefined'
         PORT = '31279'
-        IMAGE_NAME_SERVER = 'chatServer'
-        IMAGE_NAME_CLIENT = 'chatClient'
+        IMAGE_NAME_SERVER = 'chat-server'
+        IMAGE_NAME_CLIENT = 'chat-client'
     }
 
     stages {
