@@ -57,7 +57,15 @@ pipeline {
                     ls -la
                 """
             }
+        }
 
+        stage("Push docker image") {
+            steps {
+                echo "Pushing images to docker hub registry"
+                sh """
+                    ls -la
+                """
+            }
         }
     }
 
