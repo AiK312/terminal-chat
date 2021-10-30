@@ -7,8 +7,9 @@ pipeline {
         SLACK_CHANNEL = 'aik-messages'
         IP_ADDRESS = 'undefined'
         PORT = '31279'
-        IMAGE_NAME_SERVER = 'chat-server'
-        IMAGE_NAME_CLIENT = 'chat-client'
+        IMAGE_NAME_SERVER = 'terminal-chat-server'
+        IMAGE_NAME_CLIENT = 'terminal-chat-client'
+        PASSWORD_CREDENTIALS_ID = 'dockerhub'   
     }
 
     stages {
@@ -22,6 +23,16 @@ pipeline {
                     mkdir -p ../Chat-Terminal/Server
                     printenv
                 """
+            }
+        }
+
+        stage('Get Version') {
+            steps {
+                echo "Get version from package.json"
+                script {
+                    packageJson = readJSON(file: 'package.json')
+                    VERSION = packageJson.version
+                }  
             }
         }
 
@@ -48,23 +59,31 @@ pipeline {
             steps {
                 echo "Build server and client docker images"
                 sh """
-                    pwd
-                    ls -la
+                    pwd                    
                     echo "Building image: ${IMAGE_NAME_SERVER}"
-                    sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:latest . 
+                    sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:${VERSION} --tag ${IMAGE_NAME_SERVER}:latest . 
                     echo "Building image: ${IMAGE_NAME_CLIENT}"
                     sudo docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
-                    ls -la
+                    sudo docker images
                 """
             }
         }
 
         stage("Push docker image") {
             steps {
-                echo "Pushing images to docker hub registry"
-                sh """
-                    ls -la
-                """
+                withCredentials([usernamePassword(credentialsId: env.PASSWORD_CREDENTIALS_ID, usernameVariable: 'REPOSITORY_USERNAME', passwordVariable: 'REPOSITORY_PASSWORD')]) {
+                    echo "Pushing images to docker hub registry"
+                    sh """
+                        sudo docker login -u ${REPOSITORY_USERNAME} -p ${REPOSITORY_PASSWORD}
+                        REP=\$(sudo docker search --format \"{{.Name}}\" "${IMAGE_NAME_SERVER}:${VERSION}")
+                        if [ ! -z \$REP ]; then
+                            echo "docker image already exists in registry"
+                        else
+                            sudo docker push "${IMAGE_NAME_SERVER}:${VERSION}"
+                            sudo docker push "${IMAGE_NAME_SERVER}:latest"
+                        fi 
+                    """
+                }
             }
         }
     }
