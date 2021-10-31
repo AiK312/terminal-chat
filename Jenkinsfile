@@ -64,7 +64,7 @@ pipeline {
                     sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:${VERSION} --tag ${IMAGE_NAME_SERVER}:latest . 
                     echo "Building image: ${IMAGE_NAME_CLIENT}"
                     sudo docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
-                    sudo docker images
+                    sudo docker images                    
                 """
             }
         }
@@ -79,6 +79,8 @@ pipeline {
                         if [ ! -z \$REP ]; then
                             echo "docker image already exists in registry"
                         else
+                            sudo docker tag ${IMAGE_NAME_SERVER}:${VERSION} ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION}
+                            sudo docker tag ${IMAGE_NAME_SERVER}:latest ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest
                             sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION}"
                             sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest"
                         fi 
