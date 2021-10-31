@@ -31,7 +31,8 @@ pipeline {
                 echo "Get version from package.json"
                 script {
                     packageJson = readJSON(file: 'package.json')
-                    VERSION = packageJson.version
+                    VERSION_SERVER = packageJson.versionServer
+                    VERSION_CLIENT = packageJson.versionClient
                 }  
             }
         }
@@ -61,9 +62,9 @@ pipeline {
                 sh """
                     pwd                    
                     echo "Building image: ${IMAGE_NAME_SERVER}"
-                    sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:${VERSION} --tag ${IMAGE_NAME_SERVER}:latest . 
+                    sudo docker build --label ${IMAGE_NAME_SERVER} --tag ${IMAGE_NAME_SERVER}:${VERSION_SERVER} --tag ${IMAGE_NAME_SERVER}:latest . 
                     echo "Building image: ${IMAGE_NAME_CLIENT}"
-                    sudo docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
+                    sudo docker build --label ${IMAGE_NAME_CLIENT} --tag ${IMAGE_NAME_CLIENT}:${VERSION_CLIENT} --tag ${IMAGE_NAME_CLIENT}:latest . 
                     sudo docker images                    
                 """
             }
@@ -75,14 +76,15 @@ pipeline {
                     echo "Pushing images to docker hub registry"
                     sh """
                         sudo docker login -u ${REPOSITORY_USERNAME} -p ${REPOSITORY_PASSWORD}
-                        REP=\$(sudo docker search --format \"{{.Name}}\" "${IMAGE_NAME_SERVER}:${VERSION}")
-                        if [ ! -z \$REP ]; then
-                            echo "docker image already exists in registry"
-                        else
-                            sudo docker tag ${IMAGE_NAME_SERVER}:${VERSION} ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION}
-                            sudo docker tag ${IMAGE_NAME_SERVER}:latest ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest
-                            sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION}"
-                            sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest"
+                        sudo docker tag ${IMAGE_NAME_SERVER}:${VERSION_SERVER} ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION_SERVER}
+                        sudo docker tag ${IMAGE_NAME_SERVER}:latest ${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest
+                        sudo docker tag ${IMAGE_NAME_CLIENT}:${VERSION_CLIENT} ${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:${VERSION_CLIENT}
+                        sudo docker tag ${IMAGE_NAME_CLIENT}:latest ${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:latest
+
+                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION_SERVER}"
+                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest"
+                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:${VERSION_CLIENT}"
+                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:latest"
                         fi 
                     """
                 }
