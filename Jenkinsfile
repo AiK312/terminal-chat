@@ -79,8 +79,8 @@ pipeline {
                         if [ ! -z \$REP ]; then
                             echo "docker image already exists in registry"
                         else
-                            sudo docker push "${IMAGE_NAME_SERVER}:${VERSION}"
-                            sudo docker push "${IMAGE_NAME_SERVER}:latest"
+                            sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION}"
+                            sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest"
                         fi 
                     """
                 }
