@@ -84,8 +84,7 @@ pipeline {
                         sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:${VERSION_SERVER}"
                         sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_SERVER}:latest"
                         sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:${VERSION_CLIENT}"
-                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:latest"
-                        fi 
+                        sudo docker push "${REPOSITORY_USERNAME}/${IMAGE_NAME_CLIENT}:latest"                        
                     """
                 }
             }
