@@ -145,7 +145,7 @@ void *snd (void *dummyPt)
 	while(1) {
 
         char message[300];
-	cout << "Me:";
+	cout << "Text:";
         bzero(message, 301);
         cin.getline(message, 300);
       
