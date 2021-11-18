@@ -25,6 +25,7 @@ static string clsource;
 
 int main(int argc, char* argv[])
 {
+    cout << "Server version is 1.0.0" << endl;
     int pid, port;
     socklen_t len;
     struct sockaddr_in server_address, client_address;
@@ -145,7 +146,7 @@ void *snd (void *dummyPt)
 	while(1) {
 
         char message[300];
-	cout << "TEXT:";
+	cout << "Me:";
         bzero(message, 301);
         cin.getline(message, 300);
       
@@ -163,7 +164,6 @@ void *snd (void *dummyPt)
 
         cout << "\rClosing thread and connection" << endl;
         cout << "Ended." << endl;
-        cout << "Version 1.0.2" << endl;
         close(client_sock);
         close(server_sock);
         exit(0);    
