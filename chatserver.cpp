@@ -163,6 +163,7 @@ void *snd (void *dummyPt)
 
         cout << "\rClosing thread and connection" << endl;
         cout << "Ended." << endl;
+        cout << "Version 1.0.2" << endl;
         close(client_sock);
         close(server_sock);
         exit(0);    
