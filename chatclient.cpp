@@ -110,7 +110,7 @@ void *rcv (void *dummyPt)
     
         string rcvmsg (msg);       
         cout <<  "\rOther:"  << rcvmsg << endl;
-        cout << "Me:";
+        cout << "MyNickname:";
         fflush(stdout);
 
         if ( rcvmsg  =="quit") { break; }
@@ -131,7 +131,7 @@ void *snd (void *dummyPt)
         while(1) {
 
 	char message[300];
-        cout << "\rMe:";
+        cout << "\rMyNickname:";
         bzero(message, 301);
         cin.getline(message, 300);
      
