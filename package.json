@@ -1,7 +1,7 @@
 {
     "name": "terminal-chat-server",
     "versionServer": "1.0.7",
-    "versionClient": "1.0.0",
+    "versionClient": "1.0.1",
     "description": "Server of terminal chat.",
     "author": "mehdi-sadighian"
 }
