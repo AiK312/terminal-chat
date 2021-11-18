@@ -25,7 +25,7 @@ static string clsource;
 
 int main(int argc, char* argv[])
 {
-    cout << "Server version is 1.0.7" << endl;
+    cout << "Server version is 1.0.0" << endl;
     int pid, port;
     socklen_t len;
     struct sockaddr_in server_address, client_address;
